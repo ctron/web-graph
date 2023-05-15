@@ -15,8 +15,10 @@ pub fn app() -> Html {
 
                 let mut nodes = Vec::new();
 
-                const NUM: usize = 10;
-                for _ in 0..NUM {
+                const NUM_NODES: usize = 100;
+                const NUM_CONNECTIONS: usize = 100;
+
+                for _ in 0..NUM_NODES {
                     let x = random() * 1900.0;
                     let y = random() * 1000.0;
                     nodes.push(graph.add_node(
@@ -28,9 +30,9 @@ pub fn app() -> Html {
                     ));
                 }
 
-                for _ in 0..5 {
-                    let a = (cos(random()) * (NUM as f64)) as usize;
-                    let b = (random() * (NUM as f64)) as usize;
+                for _ in 0..NUM_CONNECTIONS {
+                    let a = (cos(random()) * (NUM_NODES as f64)) as usize;
+                    let b = (random() * (NUM_NODES as f64)) as usize;
 
                     let a = nodes.get(a);
                     let b = nodes.get(b);

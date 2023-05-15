@@ -219,7 +219,12 @@ impl Graph {
 
     fn tick(&mut self) {
         self.walk_edges();
-        self.walk_all_nodes();
+        // TODO: causes jitter
+        // due to the fact that nodes might get pulled in many different directions, and we apply
+        // movement directly, this causes some jitter. I guess this should be changed more in some
+        // "drag", which is the combined requested movements, also only capping the final movement
+        // not the individual ones.
+        // self.walk_all_nodes();
     }
 
     fn walk_all_nodes(&mut self) {
