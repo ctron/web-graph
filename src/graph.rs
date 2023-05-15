@@ -11,7 +11,7 @@ use std::mem::swap;
 use std::rc::Rc;
 use wasm_bindgen::closure::Closure;
 use wasm_bindgen::{JsCast, JsValue};
-use web_sys::{Element, EventTarget, HtmlCanvasElement, MouseEvent};
+use web_sys::{EventTarget, HtmlCanvasElement, MouseEvent};
 
 const MAX_MOVE: f64 = 5.0;
 
@@ -219,7 +219,7 @@ impl Graph {
 
     fn tick(&mut self) {
         self.walk_edges();
-        // self.walk_all_nodes();
+        self.walk_all_nodes();
     }
 
     fn walk_all_nodes(&mut self) {
@@ -495,10 +495,18 @@ impl NodeState {
     }
 
     fn move_to(&mut self, amount: f64, position: Position) {
-        let amount = max(min(amount, MAX_MOVE), -MAX_MOVE);
-        let angle = atan2(position.y - self.position.y, position.x - self.position.x);
-        self.position.x += cos(angle) * amount;
-        self.position.y += sin(angle) * amount;
+        let amount = amount.clamp(-MAX_MOVE, MAX_MOVE);
+
+        let center = self.center();
+        let angle = atan2(position.y - center.y, position.x - center.x);
+
+        let x = cos(angle) * amount;
+        let y = sin(angle) * amount;
+
+        //log::info!("Move = x: {x}, y: {y}");
+
+        self.position.x += x;
+        self.position.y += y;
     }
 }
 
